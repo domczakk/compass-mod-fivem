@@ -44,6 +44,26 @@ plików SDK. Projekt stosuje `/W3`, C++17 i `_CRT_SECURE_NO_WARNINGS`.
 SDK i wyniki budowania nie trafiają do Git. Linux nie jest platformą docelową;
 nie można tu potwierdzić zgodności ABI za pomocą samego kompilatora GCC.
 
+### Deklaracja buildu FiveM 3258
+
+Projekt zawiera `src/compass.rc` z zasobem
+`FX_ASI_BUILD 3258 BEGIN "\0" END`, wymaganym przez loader FiveM dla buildu
+3258. CMake kompiluje go kompilatorem zasobów Windows SDK i osadza w `.asi`.
+Nie kopiuj pliku `.rc` do katalogu pluginów — należy ponownie zbudować plugin.
+Deklaracja usuwa blokadę „does not claim to support game build 3258”, ale
+nie stanowi potwierdzenia testów działania w grze ani nie zmienia wymogu
+`sv_scriptHookAllowed 1`. Inne buildy nie są tu deklarowane.
+
+Po aktualizacji źródeł wykonaj ponownie konfigurację i build:
+
+```powershell
+cmake -B build -A x64
+cmake --build build --config Release --clean-first
+```
+
+Następnie przy zamkniętym FiveM podmień `plugins\compass.asi` plikiem
+`build\Release\compass.asi` i uruchom klienta ponownie.
+
 ## Instalacja i użycie
 
 1. Zamknij FiveM.

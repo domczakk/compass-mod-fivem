@@ -31,12 +31,15 @@ foreach(SDK_FILE inc/main.h inc/natives.h lib/ScriptHookV.lib)
     endif()
 endforeach()
 
-add_library(compass SHARED src/dllmain.cpp src/config.cpp src/compass.cpp)
+enable_language(RC)
+add_library(compass SHARED src/dllmain.cpp src/config.cpp src/compass.cpp src/compass.rc)
 target_compile_features(compass PRIVATE cxx_std_17)
 target_include_directories(compass PRIVATE sdk/inc src)
 target_link_libraries(compass PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib/ScriptHookV.lib")
 target_compile_definitions(compass PRIVATE _CRT_SECURE_NO_WARNINGS WIN32_LEAN_AND_MEAN NOMINMAX)
-target_compile_options(compass PRIVATE /W3 /EHsc)
+target_compile_options(compass PRIVATE
+    $<$<COMPILE_LANGUAGE:CXX>:/W3>
+    $<$<COMPILE_LANGUAGE:CXX>:/EHsc>)
 set_target_properties(compass PROPERTIES
     SUFFIX ".asi" PREFIX "" OUTPUT_NAME "compass"
     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

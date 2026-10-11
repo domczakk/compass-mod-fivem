@@ -1,0 +1,2 @@
+// FiveM checks this resource before loading an ASI for game build 3258.
+FX_ASI_BUILD 3258 BEGIN "\0" END
