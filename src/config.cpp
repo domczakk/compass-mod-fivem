@@ -92,7 +92,7 @@ bool Config::Load(HMODULE module) {
     colorB = integer(L"colorB", 255, 0, 255);
     bgAlpha = integer(L"bgAlpha", 100, 0, 255);
     fov = ReadFloat(path_, L"fov", 120.0f, 30.0f, 360.0f);
-    toggleKey = integer(L"toggleKey", VK_F7, 1, 254);
+    toggleKey = integer(L"toggleKey", VK_NUMPAD0, 1, 254);
     showDegrees = integer(L"showDegrees", 0, -1, 1) != 0;
     ParseLabels(Read(path_, L"labels", L"N,E,S,W"), labels);
     return true;

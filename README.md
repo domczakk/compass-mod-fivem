@@ -70,9 +70,13 @@ Następnie przy zamkniętym FiveM podmień `plugins\compass.asi` plikiem
 2. Utwórz katalog `%localappdata%\FiveM\FiveM.app\plugins\`, jeśli nie istnieje.
 3. Skopiuj do niego `compass.asi` i uruchom ponownie FiveM.
 4. Po uruchomieniu skryptu powstanie `compass.ini` obok pluginu.
-5. **F7** przełącza widoczność i zapisuje stan. Przytrzymanie nie powoduje
+5. **Num0** przełącza widoczność i zapisuje stan. Przytrzymanie nie powoduje
    wielokrotnych przełączeń; debounce wynosi 250 ms. Klawisz działa, gdy okno
    procesu gry jest na pierwszym planie.
+
+Num0 oznacza **0 na klawiaturze numerycznej przy włączonym Num Lock**.
+Jeśli masz starszy `compass.ini`, przy zamkniętym FiveM ustaw `toggleKey=96`;
+aktualizacja pluginu nie nadpisuje wybranego wcześniej klawisza.
 
 Konfiguracja jest odczytywana na początku `ScriptMain`. Aby zmienić parametry,
 zamknij FiveM, edytuj INI i uruchom klienta ponownie. Zapis po przełączeniu
@@ -93,14 +97,14 @@ Wszystkie opcje znajdują się w sekcji `[Compass]`.
 | `colorB` | `255` | Składowa niebieska, 0–255 |
 | `bgAlpha` | `100` | Przezroczystość czarnego tła, 0–255 |
 | `fov` | `120` | Zakres kierunków widoczny na pasku w stopniach, 30–360 |
-| `toggleKey` | `118` | Dziesiętny Windows Virtual-Key, 1–254; 118 = `VK_F7` |
+| `toggleKey` | `96` | Dziesiętny Windows Virtual-Key, 1–254; 96 = `VK_NUMPAD0` |
 | `showDegrees` | `0` | Etykiety liczbowe przy niekardynalnych kreskach co 15°, 0/1 |
 | `labels` | `N,E,S,W` | Cztery etykiety CSV w kolejności północ, wschód, południe, zachód |
 
 Liczby zmiennoprzecinkowe zapisuj z kropką. Wartości poza zakresem są
 klampowane; nieprawidłowe liczby otrzymują wartość domyślną. Pola całkowite
-akceptują wyłącznie zapis dziesiętny (np. `118`, nie `0x76`). Niepoprawny
-`toggleKey` przywraca F7. Zapis i odczyt ułamków są niezależne od ustawień
+akceptują wyłącznie zapis dziesiętny (np. `96`, nie `0x60`). Niepoprawny
+`toggleKey` przywraca Num0. Zapis i odczyt ułamków są niezależne od ustawień
 językowych systemu. Zbyt długie, obcięte wartości INI są odrzucane.
 CSV musi zawierać dokładnie cztery niepuste etykiety, każda do 8 drukowalnych
 znaków ASCII, bez spacji wewnętrznych i `~` (znacznik formatowania GTA).
@@ -116,7 +120,7 @@ colorG=255
 colorB=255
 bgAlpha=100
 fov=120
-toggleKey=118
+toggleKey=96
 showDegrees=0
 labels=N,E,S,W
 ```
@@ -154,7 +158,7 @@ z rejestracji, a `ScriptMain started` uruchomienie skryptu przez hosta.
 `script loop resumed` potwierdza powrót z pierwszego `WAIT(0)`.
 Log zapisuje konfigurację, przełączenia klawiszem, brak fokusu, niedostępny
 heading oraz wyjątki natywów. Zakończone wywołania rysowania nie potwierdzają,
-że host rzeczywiście pokazał HUD. F7 przełącza widoczność już działającego
+że host rzeczywiście pokazał HUD. Num0 przełącza widoczność już działającego
 skryptu; nie uruchamia pluginu.
 
 Jeśli log kończy się na rejestracji, bez `ScriptMain started`, należy sprawdzić
@@ -172,7 +176,7 @@ gwarancji braku crashy dowolnej wersji hosta.
 - Na serwerze dopuszczającym ScriptHookV sprawdź pojawienie się HUD i INI.
 - Obróć kamerę przez N/E/S/W, również przy nieruchomej postaci; sprawdź płynne
   przejście przez 359°/0°, kreski co 15° i pomijanie elementów poza paskiem.
-- Naciśnij oraz przytrzymaj F7; sprawdź pojedyncze przełączenie i zachowanie
+- Naciśnij oraz przytrzymaj Num0; sprawdź pojedyncze przełączenie i zachowanie
   widoczności po restarcie. Sprawdź brak przełączania po utracie fokusu.
 - Sprawdź `showDegrees=1`, własne etykiety, wartości poza zakresami,
   rozdzielczości 16:9 i ultrawide oraz różne ustawienia safe zone.

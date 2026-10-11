@@ -10,7 +10,7 @@ struct Config {
     int colorR = 255, colorG = 255, colorB = 255;
     int bgAlpha = 100;
     float fov = 120.0f;
-    int toggleKey = VK_F7;
+    int toggleKey = VK_NUMPAD0;
     bool showDegrees = false;
     std::array<std::string, 4> labels{{"N", "E", "S", "W"}};
 

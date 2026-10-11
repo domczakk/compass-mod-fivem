@@ -17,7 +17,7 @@ void Run() {
     Reset();
     Config c;
     Check(c.Load(nullptr), "load defaults");
-    Check(c.visible && c.toggleKey == VK_F7 && c.barWidth == 0.32f, "default values");
+    Check(c.visible && c.toggleKey == VK_NUMPAD0 && c.barWidth == 0.32f, "default values");
     Check(c.Save() && writeCount == 11, "save all options");
     Check(lastWritePath == L"C:\\plugins\\compass.ini", "INI beside plugin");
     c.visible = false;
@@ -27,7 +27,7 @@ void Run() {
 
     for (const auto* invalid : {L"", L"oops", L"123junk", L"1.5", L"0x76"}) {
         profile[L"toggleKey"] = invalid;
-        Check(c.Load(nullptr) && c.toggleKey == VK_F7, "invalid key uses F7");
+        Check(c.Load(nullptr) && c.toggleKey == VK_NUMPAD0, "invalid key uses Num0");
     }
     profile[L"colorR"] = L"-99999999999999999999999999999999";
     profile[L"colorG"] = L"99999999999999999999999999999999";
@@ -37,7 +37,7 @@ void Run() {
     Check(c.colorR == 0 && c.colorG == 255 && c.bgAlpha == 100 && c.toggleKey == 121,
           "integer overflow clamps, invalid integer defaults, whitespace accepted");
     profile[L"toggleKey"] = std::wstring(600, L'9') + L"invalid";
-    Check(c.Load(nullptr) && c.toggleKey == VK_F7, "truncated INI value uses default");
+    Check(c.Load(nullptr) && c.toggleKey == VK_NUMPAD0, "truncated INI value uses default");
 
     for (const auto* invalid : {L"NaN", L"inf", L"1e9999", L"0.2oops", L"0,2", L""}) {
         profile[L"barWidth"] = invalid;

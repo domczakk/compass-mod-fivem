@@ -8,7 +8,7 @@
 
 using HMODULE = void*;
 using DWORD = std::uint32_t;
-constexpr int VK_F7 = 118;
+constexpr int VK_NUMPAD0 = 96;
 
 namespace FakeWindows {
 inline std::map<std::wstring, std::wstring> profile;
