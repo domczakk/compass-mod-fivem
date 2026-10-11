@@ -113,6 +113,10 @@ Delta kierunku jest zawijana do `[-180, 180)`. Kreski poza FOV są pomijane,
 a tekst przy brzegach ma dodatkowy margines. Pozycja i rozmiary korzystają
 z `GET_SAFE_ZONE_SIZE`, `GET_ASPECT_RATIO` i środka ekranu 0.5; na szerokich
 monitorach szerokość jest korygowana, a grubość kresek uwzględnia proporcje.
+Obie metryki ekranu są wywoływane przez publiczne API `nativeInit`/`nativeCall`
+ScriptHookV z odczytem wyniku jako `float`. Zapewnia to zgodność z nagłówkami
+SDK, które deklarują safe zone jako `Any` lub używają starszej nazwy
+`_GET_SCREEN_ASPECT_RATIO` zamiast `GET_ASPECT_RATIO`.
 Tekst korzysta z natywów `UI::SET_TEXT_*`, `UI::_SET_TEXT_ENTRY`,
 `UI::_ADD_TEXT_COMPONENT_STRING`, `UI::_DRAW_TEXT`.
 Tło, kreski i znacznik środka używają `GRAPHICS::DRAW_RECT`.

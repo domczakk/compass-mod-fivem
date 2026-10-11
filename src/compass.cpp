@@ -1,10 +1,24 @@
 #include "compass.h"
+#include "main.h"
 #include "natives.h"
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <cstring>
+#include <limits>
 
 namespace {
+// Older SDK headers expose these natives under different names or return Any.
+// Read the float result bits through ScriptHookV's public native-call API.
+float ScreenMetric(unsigned long long hash, bool takesBooleanArgument) {
+    nativeInit(hash);
+    if (takesBooleanArgument) nativePush64(0); // GET_ASPECT_RATIO(FALSE)
+    const auto result = nativeCall();
+    if (!result) return std::numeric_limits<float>::quiet_NaN();
+    float value;
+    std::memcpy(&value, result, sizeof(value));
+    return value;
+}
 float Wrap(float angle) {
     angle = std::fmod(angle, 360.0f);
     return angle < 0.0f ? angle + 360.0f : angle;
@@ -30,13 +44,13 @@ bool EntityHeading(float* heading) {
 }
 float SafeZone() {
     __try {
-        const float value = GRAPHICS::GET_SAFE_ZONE_SIZE();
+        const float value = ScreenMetric(0xBAF107B6BB2C97F0ULL, false); // GET_SAFE_ZONE_SIZE
         return std::isfinite(value) ? std::clamp(value, 0.8f, 1.0f) : 1.0f;
     } __except (EXCEPTION_EXECUTE_HANDLER) { return 1.0f; }
 }
 float AspectRatio() {
     __try {
-        const float value = GRAPHICS::GET_ASPECT_RATIO(FALSE);
+        const float value = ScreenMetric(0xF1307EF624A80D87ULL, true); // GET_ASPECT_RATIO
         return std::isfinite(value) && value > 0.0f ? value : 16.0f / 9.0f;
     } __except (EXCEPTION_EXECUTE_HANDLER) { return 16.0f / 9.0f; }
 }
