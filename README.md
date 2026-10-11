@@ -146,7 +146,22 @@ się do ekranowych kresek i celowo nie jest wywoływany.
 Pętla oddaje sterowanie przez `WAIT(0)` po każdej iteracji. Obsługa SEH osłania
 wywołania natywów: błąd rysowania wyłącza renderer do restartu, błąd `WAIT`
 kończy skrypt, a błędy safe zone/aspect ratio uruchamiają wartości zastępcze.
-Komunikaty diagnostyczne trafiają do `OutputDebugString` (debugger Windows).
+Komunikaty diagnostyczne trafiają do `compass.log` obok pluginu oraz
+`OutputDebugString` (debugger Windows), nie do konsoli F8. Log jest dopisywany
+między uruchomieniami; przed diagnostyką zamknij FiveM i usuń stary log.
+`DLL attached` potwierdza wejście do pluginu, `scriptRegister returned` powrót
+z rejestracji, a `ScriptMain started` uruchomienie skryptu przez hosta.
+`script loop resumed` potwierdza powrót z pierwszego `WAIT(0)`.
+Log zapisuje konfigurację, przełączenia klawiszem, brak fokusu, niedostępny
+heading oraz wyjątki natywów. Zakończone wywołania rysowania nie potwierdzają,
+że host rzeczywiście pokazał HUD. F7 przełącza widoczność już działającego
+skryptu; nie uruchamia pluginu.
+
+Jeśli log kończy się na rejestracji, bez `ScriptMain started`, należy sprawdzić
+obsługę ScriptHookV przez hosta/serwer. Jeżeli nie powstaje nawet log, sprawdź
+podmianę właściwego `.asi`, folder instalacji, uprawnienia zapisu i komunikaty
+loadera. Brak logu sam w sobie nie rozstrzyga między blokadą ładowania a błędem
+zapisu. Nie zakładaj, że brak błędu w F8 oznacza działający plugin.
 Ta ochrona nie potrafi naprawić niezgodnego ABI, błędu loadera, przerwania
 procesu ani natywu, który bez wyjątku zwraca nieprawidłowe dane. Nie stanowi
 gwarancji braku crashy dowolnej wersji hosta.

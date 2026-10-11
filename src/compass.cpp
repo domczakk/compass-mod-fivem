@@ -65,9 +65,9 @@ void Text(const char* label, float x, float y, float scale, const Config& c) {
     UI::_ADD_TEXT_COMPONENT_STRING(const_cast<char*>(label));
     UI::_DRAW_TEXT(x, y);
 }
-void Draw(const Config& c) {
+CompassFrame Draw(const Config& c) {
     float heading = 0.0f;
-    if (!CameraHeading(&heading) && !EntityHeading(&heading)) return;
+    if (!CameraHeading(&heading) && !EntityHeading(&heading)) return CompassFrame::HeadingUnavailable;
     const float safe = SafeZone();
     const float aspect = AspectRatio();
     const float width = c.barWidth * safe * std::min(1.0f, (16.0f / 9.0f) / aspect);
@@ -97,10 +97,11 @@ void Draw(const Config& c) {
     }
     GRAPHICS::DRAW_RECT(0.5f, y - height * 0.5f - 0.003f * safe,
         0.004f * safe / aspect, 0.010f * safe, c.colorR, c.colorG, c.colorB, 255);
+    return CompassFrame::Drawn;
 }
 }
 
-bool DrawCompassSafely(const Config& config) {
-    __try { Draw(config); return true; }
-    __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
+CompassFrame DrawCompassSafely(const Config& config) {
+    __try { return Draw(config); }
+    __except (EXCEPTION_EXECUTE_HANDLER) { return CompassFrame::NativeFailure; }
 }

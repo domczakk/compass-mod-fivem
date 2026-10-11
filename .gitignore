@@ -5,3 +5,4 @@
 !/sdk/lib/.gitkeep
 *.asi
 compass.ini
+compass.log
