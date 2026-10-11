@@ -1,0 +1,42 @@
+cmake_minimum_required(VERSION 3.15)
+project(fivem-compass-asi LANGUAGES CXX)
+
+option(COMPASS_BUILD_PLUGIN "Build the Windows ScriptHookV plugin" ON)
+option(COMPASS_BUILD_TESTS "Build isolated configuration regression tests" OFF)
+
+if(COMPASS_BUILD_TESTS)
+    enable_testing()
+    add_executable(compass_config_tests tests/config_tests.cpp src/config.cpp)
+    target_compile_features(compass_config_tests PRIVATE cxx_std_17)
+    target_include_directories(compass_config_tests PRIVATE tests/support src)
+    if(MSVC)
+        target_compile_definitions(compass_config_tests PRIVATE _CRT_SECURE_NO_WARNINGS)
+        target_compile_options(compass_config_tests PRIVATE /W3)
+    else()
+        target_compile_options(compass_config_tests PRIVATE -Wall -Wextra -Werror)
+    endif()
+    add_test(NAME compass_config COMMAND compass_config_tests)
+endif()
+
+if(NOT COMPASS_BUILD_PLUGIN)
+    return()
+endif()
+
+if(NOT WIN32 OR NOT MSVC OR NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+    message(FATAL_ERROR "Requires Windows, MSVC and an x64 generator (-A x64).")
+endif()
+foreach(SDK_FILE inc/main.h inc/natives.h lib/ScriptHookV.lib)
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sdk/${SDK_FILE}")
+        message(FATAL_ERROR "Missing sdk/${SDK_FILE}. Install the official ScriptHookV SDK; see README.md.")
+    endif()
+endforeach()
+
+add_library(compass SHARED src/dllmain.cpp src/config.cpp src/compass.cpp)
+target_compile_features(compass PRIVATE cxx_std_17)
+target_include_directories(compass PRIVATE sdk/inc src)
+target_link_libraries(compass PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib/ScriptHookV.lib")
+target_compile_definitions(compass PRIVATE _CRT_SECURE_NO_WARNINGS WIN32_LEAN_AND_MEAN NOMINMAX)
+target_compile_options(compass PRIVATE /W3 /EHsc)
+set_target_properties(compass PROPERTIES
+    SUFFIX ".asi" PREFIX "" OUTPUT_NAME "compass"
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

@@ -1,0 +1,7 @@
+/build*/
+/sdk/inc/*
+!/sdk/inc/.gitkeep
+/sdk/lib/*
+!/sdk/lib/.gitkeep
+*.asi
+compass.ini
